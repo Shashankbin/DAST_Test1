@@ -18,8 +18,7 @@ jobs:
         with:
           target: 'https://verifacts.co.in/'
           token: ${{ secrets.ZAP_TOKEN }}
-          filters: '-exclude=http://your-app-url/some-excluded-path'
-
+          
       - name: Upload ZAP report
         uses: actions/upload-artifact@v3
         with:
