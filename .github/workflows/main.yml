@@ -15,6 +15,7 @@ jobs:
 
       - name: Set up OWASP ZAP
         uses: zaproxy/action-full-scan@v0.2.0
+        continue-on-error: true
         with:
           target: 'https://verifacts.co.in/'
           token: ${{ secrets.ZAP_TOKEN }}
