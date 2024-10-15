@@ -1,16 +1,27 @@
-name: DevSecOps Pipeline
-on: push 
-jobs: 
-  zap_scan:
+name: DAST
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  dast:
     runs-on: ubuntu-latest
-    permissions: write-all
-    name: zap
     steps:
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.6.1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up OWASP ZAP
+        uses: zaproxy/action-full-scan@v0.2.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: 'owasp/zap2docker-stable'
-          target: 'http://juice-shop.herokuapp.com/' # Change URL or IP of your target application
-          rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
+          target: 'http://verifact.co.in'
+          token: ${{ secrets.ZAP_TOKEN }}
+          filters: '-exclude=http://your-app-url/some-excluded-path'
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v2
+        with:
+          name: zap-report
+          path: zap_report.html
